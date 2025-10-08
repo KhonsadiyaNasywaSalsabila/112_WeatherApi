@@ -1,0 +1,34 @@
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script>
+        
+        function getWeatherData() {
+            const lokasiInput = document.getElementById("lokasiInput").value;
+            if (!lokasiInput) {
+                alert("Silakan masukkan nama lokasi.");
+                return;
+            }
+            const urlapi = `https://api.weatherapi.com/v1/current.json?key=86b02565cf6844d197b64251250810&q=${lokasiInput}&aqi=no`;
+            
+            $.ajax({
+                url: urlapi,
+                method: "GET",
+                success: function(data){
+                    console.log(data);
+                    document.getElementById("lokasi").innerHTML = data.location.name;
+                    document.getElementById("temperature").innerHTML = `${Math.round(data.current.temp_c)}°C`;
+                    document.getElementById("weather-desc").innerHTML = data.current.condition.text;
+                    document.getElementById("negara").innerHTML = data.location.country;
+                    document.getElementById("provinsi").innerHTML = data.location.region;
+                    document.getElementById("longitude").innerHTML = data.location.lon;
+                    document.getElementById("latitude").innerHTML = data.location.lat;
+                    document.getElementById("weather-icon").src = `https:${data.current.condition.icon}`;
+                    document.getElementById("weatherInfoContainer").style.display = "block";
+                },
+                error: function(error){
+                    console.log(error);
+                    alert("Lokasi tidak ditemukan atau terjadi kesalahan pada server.");
+                    document.getElementById("weatherInfoContainer").style.display = "none";
+                }
+            });
+        }
